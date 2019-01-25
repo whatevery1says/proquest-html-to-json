@@ -54,15 +54,10 @@ for item_idx, item in enumerate(list_html_dir):
     # pub-date
     bad_date = '1900-01-01T00:00:00Z'
     try:
-        pub_date_obj = re.search('<strong>Publication date: </strong>.+</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Section:', everything)
-        if not pub_date_obj:
-            pub_date_obj = re.search('<strong>Publication date: </strong>.+</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Publisher:', everything)
-            pub_date_text = pub_date_obj.group(0)
-            pub_date = re.sub('<strong>Publication date: </strong>', '', pub_date_text)
-            pub_date = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Publisher:', '', pub_date)
-        pub_date_text = pub_date_obj.group(0)
-        pub_date = re.sub('<strong>Publication date: </strong>', '', pub_date_text)
-        pub_date = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Section:', '', pub_date)
+        pub_date_obj = re.search('<strong>Publication date: </strong>(.+?)</p>', everything)
+        if pub_date_obj:
+            pub_date = pub_date_obj.group(1)
+        pub_date = re.sub('([a-zA-Z]*)\/([a-zA-Z]*)', r'\1', pub_date)
         date=''
         parse_date = pub_date
         while not date:
