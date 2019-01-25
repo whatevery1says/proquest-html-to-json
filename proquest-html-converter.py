@@ -64,14 +64,15 @@ for item_idx, item in enumerate(list_html_dir):
         pub_date = re.sub('<strong>Publication date: </strong>', '', pub_date_text)
         pub_date = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Section:', '', pub_date)
         date=''
+        parse_date = pub_date
         while not date:
             try:
-                date = dateparser.parse(pub_date)
+                date = dateparser.parse(parse_date)
              #   print(' parsed: ', date)
             except Exception as exc:
                 print(' ! error parsing pub_date', exc)
-                pub_date = ' '.join(pub_date.split(' ')[:-1])
-            if not pub_date or pub_date.isspace():
+                parse_date = ' '.join(parse_date.split(' ')[:-1])
+            if not parse_date or parse_date.isspace():
                 break
         date_out = date.strftime('%Y-%m-%dT%H:%M:%SZ')
       #  if not date_out:
@@ -162,6 +163,7 @@ for item_idx, item in enumerate(list_html_dir):
         article['namespace'] = "we1sv2.0"
         article['metapath'] = "Corpus," + name + ",RawData"
         article['pub_date'] = date_out
+        article['raw_date'] = pub_date
     except Exception as exc:
         print('! error adding extra keys')
     with open(json_dir + item + '.json', 'w') as outfile:
