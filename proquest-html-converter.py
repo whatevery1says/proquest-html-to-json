@@ -63,15 +63,12 @@ for item_idx, item in enumerate(list_html_dir):
         while not date:
             try:
                 date = dateparser.parse(parse_date)
-             #   print(' parsed: ', date)
             except Exception as exc:
                 print(' ! error parsing pub_date', exc)
                 parse_date = ' '.join(parse_date.split(' ')[:-1])
             if not parse_date or parse_date.isspace():
                 break
         date_out = date.strftime('%Y-%m-%dT%H:%M:%SZ')
-      #  if not date_out:
-         # date_out = bad_date
     except Exception as exc:
         print('! error finding pub-date')
         date_out = bad_date
