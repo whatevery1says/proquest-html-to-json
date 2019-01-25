@@ -71,6 +71,8 @@ for item_idx, item in enumerate(list_html_dir):
             except Exception as exc:
                 print(' ! error parsing pub_date', exc)
                 pub_date = ' '.join(pub_date.split(' ')[:-1])
+            if not pub_date or pub_date.isspace():
+                break
         date_out = date.strftime('%Y-%m-%dT%H:%M:%SZ')
       #  if not date_out:
          # date_out = bad_date
