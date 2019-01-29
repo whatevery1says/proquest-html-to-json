@@ -36,12 +36,7 @@ for file in datafile_list:
     idx = 0
     for html in html_split:
         padded_id = str(idx).zfill(len(str(len(html_split))))
-       # with open(project_dir + '/' + sub_html_dir + '/' + file_name + '_' + padded_id + '_.html', 'w') as outfile:
-           # outfile.write(item)
-        #for item_idx, item in enumerate(list_html_dir):
         article_path = proquest_dir + html
-        # with open(article_path, 'r', errors='ignore') as infile:
-            # html_file = infile.read()
         soup = BeautifulSoup(html, 'html.parser')
         p_tags = soup.find_all('p')
         everything = str(soup)
@@ -181,11 +176,8 @@ for file in datafile_list:
         except Exception as exc:
             print('! error adding extra keys')
         with open(sub_dir + '/' + file_name + '_' + padded_id + '_.json', 'w') as outfile:
-        # with open(json_dir + item + '.json', 'w') as outfile:
             json.dump(article, outfile, sort_keys=True, indent=2)           
         idx = idx+1  
-        # html_split.append(padded_id + item)
-        # print(html_split)
 
 # Delete the first json file in each subdirectory, since it is a list of links.
 for path, subdirs, files in os.walk(results_dir, topdown=True):
