@@ -18,6 +18,13 @@ proquest_dir = 'directory-where-original-proquest-results-html-files-are-stored'
 results_dir = 'directory-where-you-want-to-store-results'
 list_html_dir = os.listdir(results_dir)
 
+# Determine the filenames of the ProQuest html files that will be converted to individual json files.
+datafile_list = []
+for (dirname, _dirs, files) in os.walk(proquest_dir):
+    for filename in files:
+        if filename.endswith('.html'):
+            filepath = os.path.join(dirname.split(proquest_dir)[1], filename)
+            datafile_list.append(filepath)
 
 for item_idx, item in enumerate(list_html_dir):
     article_path = html_dir + item
