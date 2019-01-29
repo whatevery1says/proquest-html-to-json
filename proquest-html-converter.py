@@ -8,8 +8,10 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from dateutil import parser as dateparser
 
-proquest_dir = 'directory-where-original-proquest-results-html-files-are-stored'
-results_dir = 'directory-where-you-want-to-store-results'
+proquest_dir = '/Users/lxt308/testing/proquest-html/proquest-data/'
+results_dir = '/Users/lxt308/testing/proquest-html/results-script/'
+# proquest_dir = 'directory-where-original-proquest-results-html-files-are-stored'
+# results_dir = 'directory-where-you-want-to-store-results'
 
 # Determine the filenames of the ProQuest html files that will be converted to individual json files.
 datafile_list = []
@@ -151,7 +153,9 @@ for file in datafile_list:
             article['database'] = 'ProQuest'
         #name
         try:
-            name = pub_title + file
+            pub_title_transform = ''.join(pub_title.split())
+            pub_title_transform = re.sub(r'[^\w]','',pub_title_transform)
+            name = pub_title_transform + '_' + file_name
         except Exception as exc:
             print('! error adding name')
         try:
