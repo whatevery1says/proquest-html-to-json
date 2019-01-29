@@ -10,8 +10,6 @@ from dateutil import parser as dateparser
 
 proquest_dir = '/Users/lxt308/testing/proquest-html/proquest-data/'
 results_dir = '/Users/lxt308/testing/proquest-html/results-script/'
-# proquest_dir = 'directory-where-original-proquest-results-html-files-are-stored'
-# results_dir = 'directory-where-you-want-to-store-results'
 
 # Determine the filenames of the ProQuest html files that will be converted to individual json files.
 datafile_list = []
