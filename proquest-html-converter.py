@@ -2,7 +2,6 @@ import re
 import os
 import glob
 import json
-import zipfile
 import shutil
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
