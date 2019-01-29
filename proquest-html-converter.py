@@ -14,6 +14,9 @@ list_html_dir = os.listdir(html_dir)
 json_dir = '/Users/lxt308/testing/proquest-html/json/'
 file = 'ProQuestDocuments_Gender_EthnicNewsWatch_humanities_2017-01-01_2017-12-31.html'
 article = {}
+proquest_dir = 'directory-where-original-proquest-results-html-files-are-stored'
+results_dir = 'directory-where-you-want-to-store-results'
+list_html_dir = os.listdir(results_dir)
 
 
 for item_idx, item in enumerate(list_html_dir):
