@@ -3,13 +3,16 @@ import os
 import glob
 import json
 import zipfile
+import shutil
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from dateutil import parser as dateparser
 
-proquest_dir = 'directory-where-original-proquest-results-html-files-are-stored'
-results_dir = 'directory-where-you-want-to-store-results'
-list_html_dir = os.listdir(results_dir)
+proquest_dir = '/Users/lxt308/testing/proquest-html/proquest-data/'
+results_dir = '/Users/lxt308/testing/proquest-html/results-script/'
+# proquest_dir = 'directory-where-original-proquest-results-html-files-are-stored'
+# results_dir = 'directory-where-you-want-to-store-results'
+# list_html_dir = os.listdir(results_dir)
 
 # Determine the filenames of the ProQuest html files that will be converted to individual json files.
 datafile_list = []
@@ -60,10 +63,10 @@ for file in datafile_list:
             article['doc_id'] = ''
         # pub
         try:
-            pub_title_obj = re.search('<strong>Publication title: </strong>.+</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Volume: ', everything)
-            pub_title_text = pub_title_obj.group(0)
-            pub_title = re.sub('<strong>Publication title: </strong>', '', pub_title_text)
-            pub_title = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Volume:', '', pub_title)
+            pub_title_obj = re.search('<strong>Publication title: </strong>(.+?)</p>', everything)
+            pub_title = pub_title_obj.group(1)
+            # pub_title = re.sub('<strong>Publication title: </strong>', '', pub_title_text)
+            # pub_title = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Volume:', '', pub_title)
             article['pub'] = pub_title
         except Exception as exc:
             print('! error finding pub_title')
@@ -91,20 +94,20 @@ for file in datafile_list:
             date_out = bad_date
         # volume
         try:
-            volume_obj = re.search('<strong>Volume: </strong>.+</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Issue:', everything)
-            volume_text = volume_obj.group(0)
-            volume = re.sub('<strong>Volume: </strong>', '', volume_text)
-            volume = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Issue:', '', volume)
+            volume_obj = re.search('<strong>Volume: </strong>(.+?)</p>', everything)
+            volume = volume_obj.group(1)
+            # volume = re.sub('<strong>Volume: </strong>', '', volume_text)
+            # volume = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Issue:', '', volume)
             article['volume'] = volume
         except Exception as exc:
             print('! error finding volume')
             article['volume'] = ''
         # issue
         try:
-            issue_obj = re.search('<strong>Issue: </strong>.+</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Pages:', everything)
-            issue_text = issue_obj.group(0)
-            issue = re.sub('<strong>Issue: </strong>', '', issue_text)
-            issue = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Pages:', '', issue)
+            issue_obj = re.search('<strong>Issue: </strong>(.+?)</p>', everything)
+            issue = issue_obj.group(1)
+            # issue = re.sub('<strong>Issue: </strong>', '', issue_text)
+            # issue = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Pages:', '', issue)
             article['issue'] = issue
         except Exception as exc:
             print('! error finding issue')
@@ -125,10 +128,10 @@ for file in datafile_list:
             print('! error finding length')
         # section
         try:
-            section_obj = re.search('<strong>Section: </strong>.+</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Publisher:', everything)
-            section_text = section_obj.group(0)
-            section = re.sub('<strong>Section: </strong>', '', section_text)
-            section = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Publisher:', '', section)
+            section_obj = re.search('<strong>Section: </strong>(.+?)</p>', everything)
+            section = section_obj.group(1)
+            # section = re.sub('<strong>Section: </strong>', '', section_text)
+            # section = re.sub('</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding-left:0;"><strong>Publisher:', '', section)
             article['section'] = section
         except Exception as exc:
             print('! error finding section')
@@ -143,20 +146,20 @@ for file in datafile_list:
             article['author'] = ''
         # copyright
         try:
-            pub_info_obj = re.search('<strong>Publication info: </strong>.+.</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding:0;"><a href=', everything)
-            pub_info_text = pub_info_obj.group(0)
-            pub_info = re.sub('<strong>Publication info: </strong>', '', pub_info_text)
-            pub_info = re.sub('.</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding:0;"><a href=', '', pub_info)
+            pub_info_obj = re.search('<strong>Publication info: </strong>(.+?)</p>', everything)
+            pub_info = pub_info_obj.group(1)
+            # pub_info = re.sub('<strong>Publication info: </strong>', '', pub_info_text)
+            # pub_info = re.sub('.</p><p style="margin-bottom:5pt; margin-top:0; margin-right:0; margin-left:0; padding:0;"><a href=', '', pub_info)
             article['copyright'] = pub_info
         except Exception as exc:
             print('! error finding copyright')
             article['copyright'] = ''
         # database
         try:
-            database_obj = re.search('<strong>Database: </strong>.+</p>', everything)
-            database_text = database_obj.group(0)
-            database = re.sub('<strong>Database: </strong>', '', database_text)
-            database = re.sub('</p>', '', database)
+            database_obj = re.search('<strong>Database: </strong>(.+?)</p>', everything)
+            database = database_obj.group(1)
+            # database = re.sub('<strong>Database: </strong>', '', database_text)
+            # database = re.sub('</p>', '', database)
             article['database'] = database
         except Exception as exc:
             print('! error finding database')
@@ -185,3 +188,10 @@ for path, subdirs, files in os.walk(results_dir, topdown=True):
         if '_00_.json' in name:
             first_file = os.path.join(path, name)
             os.remove(first_file)
+
+# Zip up each subdirectory and delete unzipped directory
+for path, subdirs, files in os.walk(results_dir, topdown=True):
+    for subdir in subdirs:
+       single_subdir = os.path.join(path, subdir)
+       shutil.make_archive(single_subdir,'zip',single_subdir)
+       shutil.rmtree(single_subdir)
