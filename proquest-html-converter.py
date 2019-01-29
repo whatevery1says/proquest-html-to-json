@@ -123,6 +123,7 @@ for file in datafile_list:
             article['section'] = section
         except Exception as exc:
             print('! error finding section')
+            article['section'] = ''
         # author
         try:
             just_author = p_tags[2]
@@ -155,6 +156,7 @@ for file in datafile_list:
             name = pub_title_transform + '_' + file_name
         except Exception as exc:
             print('! error adding name')
+            article['name'] = ''
         try:
             article['attachment-id'] = ''
             article['name'] = name 
