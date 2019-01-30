@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from dateutil import parser as dateparser
 
-proquest_dir = '/Users/lxt308/testing/proquest-html/proquest-data/'
-results_dir = '/Users/lxt308/testing/proquest-html/results-script/'
+proquest_dir = 'directory-where-the-proquest-html-files-are'
+results_dir = 'directory-where-you-want-the-results-to-go'
 
 # Determine the filenames of the ProQuest html files that will be converted to individual json files.
 datafile_list = []
